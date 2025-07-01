@@ -22,20 +22,17 @@ RUN a2enmod rewrite
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy only composer files first (for better layer caching)
-COPY composer.json composer.lock ./
-
-# Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Now copy the rest of the application, including artisan
+# Copy the full Laravel application (including artisan)
 COPY . .
 
-# Set proper permissions
+# Run composer install (artisan now exists)
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Set correct permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose port 80
+# Expose Apache port
 EXPOSE 80
 
 # Start Apache
