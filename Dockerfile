@@ -22,16 +22,16 @@ RUN a2enmod rewrite
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy composer files first (better Docker layer caching)
+# Copy only composer files first (for better layer caching)
 COPY composer.json composer.lock ./
 
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Copy the rest of the application code
+# Now copy the rest of the application, including artisan
 COPY . .
 
-# Set correct permissions
+# Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
