@@ -25,12 +25,11 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /et
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy composer files and install dependencies first (build caching)
-COPY composer.lock composer.json ./
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Now copy the rest of the application (including artisan, public/, routes/, etc.)
+# ✅ Copy the entire Laravel application including artisan
 COPY . .
+
+# ✅ Run Composer after copying artisan
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
