@@ -1,3 +1,25 @@
-vendor
+# Ignore node dependencies and build files
 node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignore vendor folder (Composer will install dependencies inside the container)
+vendor
+
+# Ignore environment files and IDE settings (optional, but recommended)
 .env
+.env.local
+.env.production
+.env.testing
+.env.backup
+*.env
+
+# Ignore system and editor files
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Ignore tests if not needed in production
+/tests
+phpunit.xml
